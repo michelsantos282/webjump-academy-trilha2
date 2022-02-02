@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * PHP version 7
+ * @author      Webjump Core Team <dev@webjump.com.br>
+ * @copyright   2021 Webjump (http://www.webjump.com.br)
+ * @license     http://www.webjump.com.br  Copyright
+ *
+ * @link        http://www.webjump.com.br
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="Webjump\HelloWorld\Api\PetRepositoryInterface"
+                type="Webjump\HelloWorld\Model\PetRepository"/>
+
+    <preference for="Webjump\HelloWorld\Api\Data\PetInterface"
+                type="Webjump\HelloWorld\Model\Data\Pet"/>
+
+    <preference for="Webjump\HelloWorld\Api\Data\PetSearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults"/>
+
+
+    <type name="Magento\Framework\App\Action\Action">
+        <plugin name="first_plugin" type="Webjump\HelloWorld\Plugin\ActionPlugin" sortOrder="1" disabled="false" />
+    </type>
+
+    <virtualType name="CustomLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">Webjump\HelloWorld\Logger\Handler\DebugHandler</item>
+                <item name="critical" xsi:type="object">Webjump\HelloWorld\Logger\Handler\CriticalHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Webjump\HelloWorld\Plugin\ActionPlugin">
+        <arguments>
+            <argument name="logger" xsi:type="object">CustomLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="my_first_command" xsi:type="object">Webjump\HelloWorld\Console\Command\FirstCommand</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
